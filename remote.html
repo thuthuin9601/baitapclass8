@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td></td>
+            <th>Remote</th>
+            <th>Television</th>
+            <th>SCREEN</th>
+        </tr>
+        <tr>
+            <th>ON status</th>
+            <td><button onclick="on_remote()">ON</button><button onclick="off_remote()">OFF</button></td>
+            <td><button onclick="on_tv()">ON</button><button onclick="off_tv()">OFF</button></td>
+            <td id="status"></td>
+        </tr>
+        <tr>
+            <th>CHANNEL</th>
+            <td><input type="number" id="number" min="0" max="99"><button onclick="change()">change</button></td>
+            <td><button onclick="upchannel()">+</button><button onclick="downchannel()">-</button></td>
+            <td id="channel"></td>
+        </tr>
+        <tr>
+            <th>VOLUME</th>
+            <td><button onclick="upvolume_remote()">+</button><button onclick="downvolume_remote()">-</button></td>
+            <td><button onclick="upvolume_tv()">+</button><button onclick="downvolume_tv()">-</button></td>
+            <td id="volume"></td>
+        </tr>
+    </table>
+</body>
+</html>
+<script>
+    class Television {
+        constructor(name){
+            this.name=name
+            this.channel=0;
+            this.volume=0;
+            this.status=false;
+        }
+        getChannel(){
+            if( this.status==true){//thiếu channel >0
+                return this.channel;
+            }   
+        }
+        getVolume(){
+            if( this.status==true){
+                return this.volume;
+            }   
+        }
+        turnOn(){
+            this.status=true;
+            return this.status;
+        }
+        turnOff(){
+            this.status=false;
+            return this.status
+        }
+        checkStatus(){
+            return this.name+': '+this.status;
+        }
+        increaseChannel(){
+            if( this.status==true&&this.channel<99){
+                this.channel++;
+            }       
+        }
+        decreaseChannel(){
+            if( this.status==true&&this.channel>0){
+                this.channel--;
+            }  
+        }
+        increaseVolume(){
+            if( this.status==true&&this.volume<99){
+                this.volume++;
+            }  
+        }
+        decreaseVolume(){//thiếu volume >0;
+            if( this.status==true&&this.volume>0){
+                this.volume--;
+            }  
+        }
+    }
+    class Remote{
+        constructor(tv){
+            this.tv=tv;
+        }
+        changeChannel(new_channel){
+            if(this.tv.status==true){
+                this.tv.channel=new_channel;
+            }
+        }
+        increaseVolume(){
+            if(this.tv.status==true&&this.tv.volume<99){
+                this.tv.volume++;
+            }
+        }
+        decreaseVolume(){
+            if(this.tv.status==true&&this.tv.volume>0){
+                this.tv.volume--;
+            }
+        }
+        turnOn(){
+            this.tv.turnOn();
+        }
+        turnOff(){
+            this.tv.turnOff();
+        }
+    }
+    let samsung= new Television('Samsung');
+    let remote= new Remote(samsung);
+    function on_remote(){
+        remote.turnOn();
+        document.getElementById('status').innerHTML=samsung.checkStatus();
+
+    }
+    function off_remote(){
+        remote.turnOff();
+        document.getElementById('status').innerHTML=samsung.checkStatus();
+
+    }
+    function on_tv(){
+        samsung.turnOn();
+        document.getElementById('status').innerHTML=samsung.checkStatus();
+    }
+    function off_tv(){
+        samsung.turnOff();
+        document.getElementById('status').innerHTML=samsung.checkStatus();
+    }
+    
+    function change(){
+        let number= document.getElementById('number').value;
+        remote.changeChannel(number);
+        document.getElementById('channel').innerHTML=samsung.getChannel();
+    }
+    function upchannel(){
+        samsung.increaseChannel();
+        document.getElementById('channel').innerHTML=samsung.getChannel();
+    }
+    function downchannel(){
+        samsung.decreaseChannel();
+        document.getElementById('channel').innerHTML=samsung.getChannel();
+    }
+    function upvolume_remote(){
+        remote.increaseVolume();
+        document.getElementById('volume').innerHTML=samsung.getVolume();
+    }
+    function downvolume_remote(){
+        remote.decreaseVolume();
+        document.getElementById('volume').innerHTML=samsung.getVolume();
+    }
+    function upvolume_tv(){
+        samsung.increaseVolume();
+        document.getElementById('volume').innerHTML=samsung.getVolume();
+    }
+    function downvolume_tv(){
+        samsung.decreaseVolume();
+        document.getElementById('volume').innerHTML=samsung.getVolume();
+    }
+
+</script>
